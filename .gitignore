@@ -18,6 +18,7 @@ label_web.html
 # ---- 补标清单 (标注完成后不再需要) ----
 NEED_MANUAL_LABEL.txt
 
-# ---- Python 缓存 ----
+# ---- Python / YOLO 缓存 ----
 __pycache__/
 *.pyc
+*.cache
