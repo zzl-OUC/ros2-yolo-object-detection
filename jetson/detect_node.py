@@ -167,19 +167,30 @@ class YoloDetectNode(Node):
             return
         msg = CompressedImage()
         msg.format = "jpeg"
-        msg.data = np.frombuffer(buf.tobytes(), np.uint8)
+        # Foxy 的 uint8[] 校验不接受 numpy 数组, 须转 bytes
+        msg.data = bytes(buf.tobytes())
         self.img_pub.publish(msg)
 
     def draw(self, frame, dets):
         out = frame.copy()
+        H, W = out.shape[:2]
         for x1, y1, x2, y2, cls_id, conf, name in dets:
             x1, y1, x2, y2 = map(int, (x1, y1, x2, y2))
             color = COLORS[cls_id % len(COLORS)]
             cv2.rectangle(out, (x1, y1), (x2, y2), color, 2)
             label = f"{name} {conf:.2f}"
             (tw, th), _ = cv2.getTextSize(label, FONT, 0.6, 1)
-            cv2.rectangle(out, (x1, y1 - th - 10), (x1 + tw + 6, y1), color, -1)
-            cv2.putText(out, label, (x1 + 3, y1 - 5), FONT, 0.6,
+            # 标签优先放框上方, 空间不足则放框下方, 并裁到画面内
+            if y1 - th - 10 >= 0:
+                bg_tl, bg_br = (x1, y1 - th - 10), (x1 + tw + 6, y1)
+                tx, ty = x1 + 3, y1 - 5
+            else:
+                bg_tl, bg_br = (x1, y2), (x1 + tw + 6, y2 + th + 10)
+                tx, ty = x1 + 3, y2 + th + 5
+            bg_tl = (max(0, bg_tl[0]), max(0, bg_tl[1]))
+            bg_br = (min(W, bg_br[0]), min(H, bg_br[1]))
+            cv2.rectangle(out, bg_tl, bg_br, color, -1)
+            cv2.putText(out, label, (tx, ty), FONT, 0.6,
                         (0, 0, 0), 1, cv2.LINE_AA)
         cv2.putText(out, f"FPS: {self.fps:.1f}", (10, 28), FONT, 0.8,
                     (0, 255, 0), 2, cv2.LINE_AA)

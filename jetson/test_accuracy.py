@@ -67,13 +67,26 @@ def expected_class(img_path, gt, names):
         return gt.get(img_path) or gt.get(os.path.basename(img_path))
     stem = os.path.splitext(os.path.basename(img_path))[0]
     guess = stem.split("_")[0]
-    return guess if guess in names else None
+    # model.names 形如 {0:'mouse', 1:'phone'}: 键是类别 id, 类别名在 values 里
+    valid = set(names.values()) if isinstance(names, dict) else set(names)
+    return guess if guess in valid else None
 
 
 def main():
     args = parse_args()
     model = YOLO(resolve_model(args.model))
-    names = model.names
+    try:
+        names = model.names
+    except AttributeError:
+        # 新版 ultralytics 纯 engine/onnx 加载不暴露 names (类别名存于 best.pt 元数据);
+        # 同目录的 best.pt 仅用于读取 {id: 类别名} 映射, 推理仍走 engine
+        here = os.path.dirname(os.path.abspath(__file__)) or "."
+        for cand in (os.path.join(here, "best.pt"), "best.pt"):
+            if os.path.exists(cand):
+                names = YOLO(cand).names
+                break
+        else:
+            raise SystemExit("无法获取类别名: 请把 best.pt 放到脚本同目录后再跑")
 
     files = sorted(os.path.join(args.images, f) for f in os.listdir(args.images)
                    if f.lower().endswith(IMG_EXTS))

@@ -1,0 +1,11 @@
+# Jetson 推理所需 Python 依赖 (JetPack 5: Python 3.8)
+# 注意: torch/torchvision 由 JetPack 预装 (NVIDIA CUDA 版), 不要在此用 pip 装,
+#       否则会覆盖成 PyPI 的 CPU 版。cv2 用系统的 (apt 装 python3-opencv)。
+# polars 必须钉 <1: py3.8 没有新版 wheel; ultralytics 8.4+ 依赖 polars>=0.20
+# 不要加 onnxsim: 无 aarch64 预编译包, 源码编译必挂; 新版 ultralytics 导出用 onnxslim(纯py)
+# onnx/onnxslim 须手动装; 不要装 onnxruntime-gpu (PyPI 无 aarch64 wheel, 且 TensorRT 导出用不到)
+ultralytics
+numpy
+polars<1
+onnx<2.0.0
+onnxslim
