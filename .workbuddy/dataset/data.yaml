@@ -1,9 +1,0 @@
-# YOLO dataset config for ros2-yolo-object-detection
-# 类别: 0=mouse, 1=phone
-path: dataset
-train: images/train
-val: images/val
-nc: 2
-names:
-  - mouse
-  - phone

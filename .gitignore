@@ -30,3 +30,4 @@ cam_test_0.jpg
 # ---- 数据集重命名备份 (本地, 不入库) ----
 dataset_backup_*/
 dataset_backup_20260904/
+.workbuddy/
