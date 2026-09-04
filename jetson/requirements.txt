@@ -1,11 +1,26 @@
-# Jetson 推理所需 Python 依赖 (JetPack 5: Python 3.8)
-# 注意: torch/torchvision 由 JetPack 预装 (NVIDIA CUDA 版), 不要在此用 pip 装,
-#       否则会覆盖成 PyPI 的 CPU 版。cv2 用系统的 (apt 装 python3-opencv)。
-# polars 必须钉 <1: py3.8 没有新版 wheel; ultralytics 8.4+ 依赖 polars>=0.20
-# 不要加 onnxsim: 无 aarch64 预编译包, 源码编译必挂; 新版 ultralytics 导出用 onnxslim(纯py)
-# onnx/onnxslim 须手动装; 不要装 onnxruntime-gpu (PyPI 无 aarch64 wheel, 且 TensorRT 导出用不到)
-ultralytics
-numpy
-polars<1
-onnx<2.0.0
-onnxslim
+# =============================================================================
+# Jetson 部署依赖清单
+# 目标平台: NVIDIA Jetson Orin NX | JetPack 5 | Ubuntu 20.04 | Python 3.8
+# =============================================================================
+#
+# 环境约束 (JetPack 5 必须严格遵守):
+#   1. PyTorch / TorchVision 由 JetPack 5 系统预装 (NVIDIA CUDA 构建),
+#      严禁通过 pip 安装 PyPI 版本, 否则会覆盖为 CPU-only 构建, 导致 CUDA 不可用。
+#   2. OpenCV 使用系统包 (apt install python3-opencv), 不要用 pip 安装。
+#   3. polars 须固定 <1: Python 3.8 无新版 manylinux wheel,
+#      安装新版会触发源码编译 (需 Rust 工具链) 而失败。
+#      ultralytics>=8.4 要求 polars>=0.20, 故锁定 polars<1 同时满足下限与 py3.8 兼容。
+#   4. 不要安装 onnxsim: aarch64 无预编译 wheel, 源码编译必然失败。
+#      新版 ultralytics 导出 ONNX 改用纯 Python 的 onnxslim。
+#   5. 不要安装 onnxruntime-gpu: PyPI 无 aarch64 wheel, 且 TensorRT 引擎导出/推理不使用它。
+#
+# 安装 (在 Jetson 上执行):
+#   python3 -m pip install -r requirements.txt
+#   建议用 python3 -m pip 而非裸 pip3 (JetPack 5 自带 pip 较旧)。
+# =============================================================================
+
+ultralytics      # YOLO 推理 / TensorRT 引擎导出 (提供 yolo CLI)
+numpy            # 数值计算
+polars<1         # 数据处理; 锁定 <1 以兼容 Python 3.8
+onnx<2.0.0       # ONNX 模型读写 (ultralytics 导出中间格式)
+onnxslim         # ONNX 图优化 (替代 onnxsim, 纯 Python, 支持 aarch64)
