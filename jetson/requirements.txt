@@ -3,9 +3,9 @@
 # 目标平台: NVIDIA Jetson Orin NX | JetPack 5 | Ubuntu 20.04 | Python 3.8
 # =============================================================================
 #
-# 环境约束 (JetPack 5 必须严格遵守):
+# 环境约束
 #   1. PyTorch / TorchVision 由 JetPack 5 系统预装 (NVIDIA CUDA 构建),
-#      严禁通过 pip 安装 PyPI 版本, 否则会覆盖为 CPU-only 构建, 导致 CUDA 不可用。
+#      不可通过 pip 安装 PyPI 版本, 否则会覆盖为 CPU-only 构建, 导致 CUDA 不可用。
 #   2. OpenCV 使用系统包 (apt install python3-opencv), 不要用 pip 安装。
 #   3. polars 须固定 <1: Python 3.8 无新版 manylinux wheel,
 #      安装新版会触发源码编译 (需 Rust 工具链) 而失败。
