@@ -11,8 +11,6 @@
 └── setup_on_jetson.sh # 上板一键: 装依赖 + 导出 best.engine
 ```
 
-## 0. 最快上板 (推荐)
-
 把本目录 (`best.pt` + `detect_node.py` + `test_accuracy.py` + `requirements.txt` + `setup_on_jetson.sh`)
 整体拷到 Jetson,例如 `~/yolo_exp/`,然后在该目录里跑一条命令即可完成"装依赖 + 导出引擎":
 
@@ -25,8 +23,7 @@ bash setup_on_jetson.sh humble 6      # 参数: [ROS_DISTRO] [JetPack大版本];
 若你的板子是 JetPack 5 / Foxy,改成 `bash setup_on_jetson.sh foxy 5`。
 其余实时检测、识别率测试、录屏步骤见下文。
 
-## 1. 环境准备 (Jetson 上执行一次)
-
+## 1. 环境准备 
 JetPack 已自带 CUDA / cuDNN / TensorRT,只缺 Python 包:
 
 ```bash
@@ -40,7 +37,7 @@ sudo apt install ros-${ROS_DISTRO}-vision-msgs   # Detection2DArray 消息
 > ROS_DISTRO 视 JetPack 而定:JetPack 6 → Humble,JetPack 5 → Foxy/Galactic。
 > 每次使用前先 `source /opt/ros/$ROS_DISTRO/setup.bash`。
 
-## 2. 导出 TensorRT 模型 (保证 ≥5 FPS 的关键)
+## 2. 导出 TensorRT 模型
 
 ```bash
 yolo export model=best.pt format=engine half=True device=0
@@ -103,17 +100,15 @@ PC 端可用 OBS / Win+G,Jetson 端可用 `kazam` 或手机拍摄屏幕。
 | imshow 报错 | SSH 会话没有桌面,加 `--no-display` |
 | USB 摄像头打不开 | `ls /dev/video*` 确认索引,`--source` 传对应编号 |
 
-## 7. PC 端基线结果 (供报告引用)
+## 7. PC 端基线结果
 
 在 PC (RTX 4060 Laptop, CUDA, `weights/best.pt` 合并重训模型) 上对 **40 张** 独立测试图
 (20 mouse + 20 phone, 与训练集不同场景的桌面照) 跑 `test_accuracy.py` 的基线:
 
 ```
-测试总数: 40    正确: 36    识别率: 90.0%    要求 >=80%: 通过
+测试总数: 40    正确: 36    识别率: 90.0%   
 平均单帧推理: 108 ms    折算约 9.3 FPS
 分类别: mouse 20/20  phone 16/20
 错误案例: phone_12 / phone_14 (未检出), phone_15 / phone_18 (误判为 mouse)
 ```
 
-> 上板后建议用 `best.engine` 在 Jetson 上再跑一遍同一套 40 张测试图,把这里的
-> "PC 基线" 替换为 "Jetson 实测" 填进报告 §5;FPS 改为 Jetson 实测值填 §4。

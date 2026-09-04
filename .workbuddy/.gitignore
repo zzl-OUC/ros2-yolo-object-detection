@@ -1,0 +1,28 @@
+# ---- 模型权重 (不入库, 本地/缓存管理) ----
+*.pt
+*.onnx
+*.engine
+
+# ---- 训练产物 ----
+runs/
+weights/
+
+# ---- 自动打标 / 网页标注 工具的过程文件 (留本地, 不入库) ----
+auto_label.py
+auto_label_run.log
+auto_label_m.log
+auto_label_fill.log
+label_web.py
+label_web.html
+
+# ---- 补标清单 (标注完成后不再需要) ----
+NEED_MANUAL_LABEL.txt
+
+# ---- Python / YOLO 缓存 ----
+__pycache__/
+*.pyc
+*.cache
+
+# ---- 无关 / 临时文件 (不入库) ----
+torchvision-0.16.0.tar.gz
+cam_test_0.jpg
