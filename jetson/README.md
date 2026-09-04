@@ -18,14 +18,14 @@
 
 ```
 ~/yolo_exp/
-├── best.pt            # 训练权重（取自 weights/best.pt，已为合并重训模型）
+├── best.pt            # 训练权重
 ├── detect_node.py     # ROS2 实时检测节点
 ├── test_accuracy.py   # 识别率测试脚本
 ├── requirements.txt   # Python 依赖清单
 └── setup_on_jetson.sh # 一键环境准备 + TensorRT 引擎导出
 ```
 
-## 1. 一键部署（推荐）
+## 1. 一键部署
 
 在 Jetson 上执行单条命令即可完成依赖安装与引擎导出：
 
@@ -115,9 +115,9 @@ python3 test_accuracy.py --model best.engine
 | imshow 报错 | SSH 会话无桌面，追加 `--no-display` |
 | USB 摄像头无法打开 | `ls /dev/video*` 确认设备索引，以 `--source` 指定 |
 
-## 8. PC 端基线（供报告引用）
+## 8. PC 端基线
 
-在 PC（RTX 4060 Laptop，CUDA，`weights/best.pt` 合并重训模型）上对同一 40 张测试图运行 `test_accuracy.py` 基线：
+在 PC（RTX 4060 Laptop，CUDA，`weights/best.pt` 训模型）上对同一 40 张测试图运行 `test_accuracy.py` 基线：
 
 ```
 测试总数: 40    正确: 36    识别率: 90.0%    要求 >=80%: 通过
@@ -126,4 +126,3 @@ python3 test_accuracy.py --model best.engine
 错误案例: phone_12 / phone_15 (漏检), phone_14 / phone_18 (误判为 mouse)
 ```
 
-上板后建议用 `best.engine` 在 Jetson 重跑同一测试集，将此处「PC 基线」替换为「Jetson 实测」填入报告 §5，FPS 取 Jetson 实测值填入 §4。

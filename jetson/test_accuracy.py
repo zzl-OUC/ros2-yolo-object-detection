@@ -96,6 +96,8 @@ def main():
 
     dirs = {k: os.path.join(args.out, k) for k in ("annotated", "errors")}
     for d in dirs.values():
+        if os.path.isdir(d):
+            shutil.rmtree(d)          # 每次运行清空旧结果, 避免历史残留叠加
         os.makedirs(d, exist_ok=True)
 
     rows, skipped = [], []

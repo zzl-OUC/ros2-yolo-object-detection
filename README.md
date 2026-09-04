@@ -1,13 +1,12 @@
 # ros2-yolo-object-detection
 
-课程实验一「目标检测与识别」：在自建桌面数据集（鼠标 / 手机两类）上训练 YOLO11s 检测模型，并部署到 **Jetson Orin NX + ROS2 Foxy** 实现实时检测。
+课程实验一「目标检测与识别」：在数据集（鼠标 / 手机两类）上训练 YOLO11s 检测模型，并部署到 **Jetson Orin NX + ROS2 Foxy** 实现实时检测。
 
-## 验收结果（均已达成）
+## 验收结果
 
-- 识别类别：mouse + phone（2 类）✅
-- 独立测试集识别率：**90.0%（36/40）** ≥ 80% ✅
-- Jetson 实时 FPS：**33.6 FPS** ≥ 5 FPS ✅
-- 结果保存：逐张明细 + 典型错误案例归档 ✅
+- 识别类别：mouse + phone（2 类）
+- 独立测试集识别率：90.0%（36/40）
+- Jetson 实时 FPS：33.6 FPS
 
 ## 目录结构
 
@@ -21,7 +20,7 @@
 │   ├── detect_node.py       # ROS2 实时检测节点
 │   ├── test_accuracy.py     # 识别率测试
 │   ├── setup_on_jetson.sh   # 上板一键：装依赖 + 导出 best.engine
-│   └── README.md            # ⭐ 部署运行说明（详细）
+│   └── README.md            # 部署运行说明）
 ├── test_results/            # PC 测试结果（summary + 标注图 + 错误案例）
 ├── test_results_jetson.csv  # Jetson 实测逐张明细
 ├── video/                   # 结果录屏 demo_jetson_1/2.mp4
