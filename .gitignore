@@ -22,3 +22,7 @@ NEED_MANUAL_LABEL.txt
 __pycache__/
 *.pyc
 *.cache
+
+# ---- 无关 / 临时文件 (不入库) ----
+torchvision-0.16.0.tar.gz
+cam_test_0.jpg
