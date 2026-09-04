@@ -14,16 +14,16 @@
 # ============================================================================
 set -e
 
-ROS_DISTRO=${1:-humble}
-JP=${2:-6}
+ROS_DIST=${1:-humble}
+JP_VER=${2:-6}
 
-echo "==> ROS_DISTRO=$ROS_DISTRO   JetPack=$JP"
+echo "==> ROS_DISTRO=$ROS_DIST   JetPack=$JP_VER"
 
 # 1) 导入 ROS2 环境
-if [ -f "/opt/ros/$ROS_DISTRO/setup.bash" ]; then
-  source "/opt/ros/$ROS_DISTRO/setup.bash"
+if [ -f "/opt/ros/$ROS_DIST/setup.bash" ]; then
+  source "/opt/ros/$ROS_DIST/setup.bash"
 else
-  echo "✗ 未找到 /opt/ros/$ROS_DISTRO/setup.bash, 请先确认 JetPack 自带的 ROS2 是否已装"
+  echo "✗ 未找到 /opt/ros/$ROS_DIST/setup.bash, 请先确认 JetPack 自带的 ROS2 是否已装"
   exit 1
 fi
 
@@ -44,16 +44,16 @@ python3 -m pip install -r requirements.txt
 export PATH="$HOME/.local/bin:$PATH"
 
 # 3) vision_msgs (Detection2DArray 消息; 缺了节点会自动退化成 JSON, 不影响验收)
-echo "==> 安装 ros-$ROS_DISTRO-vision-msgs"
-sudo apt-get install -y "ros-$ROS_DISTRO-vision-msgs" || \
+echo "==> 安装 ros-$ROS_DIST-vision-msgs"
+sudo apt-get install -y "ros-$ROS_DIST-vision-msgs" || \
   echo "  (vision-msgs 安装失败可忽略, 节点会退化为 JSON 发布)"
 
 # 4) torch: JetPack 通常已预装, 仅当缺失时按版本补装
 if python3 -c "import torch" 2>/dev/null; then
   echo "==> torch 已随 JetPack 预装, 跳过"
 else
-  echo "==> 未检测到 torch, 按 JetPack $JP 安装 Jetson 版 PyTorch"
-  if [ "$JP" = "6" ]; then
+  echo "==> 未检测到 torch, 按 JetPack $JP_VER 安装 Jetson 版 PyTorch"
+  if [ "$JP_VER" = "6" ]; then
     python3 -m pip install torch torchvision --index-url https://pypi.jetson-ai-lab.dev/jp6/cu126
   else
     python3 -m pip install torch torchvision --index-url https://pypi.jetson-ai-lab.dev/jp5/cu122
@@ -66,7 +66,7 @@ yolo export model=best.pt format=engine half=True device=0
 
 echo ""
 echo "✅ 部署完成. 运行实时节点:"
-echo "    source /opt/ros/$ROS_DISTRO/setup.bash"
+echo "    source /opt/ros/$ROS_DIST/setup.bash"
 echo "    python3 detect_node.py --model best.engine --source 0"
 echo "    # SSH 无桌面: 加 --no-display"
 echo "识别率测试:  python3 test_accuracy.py --model best.engine"

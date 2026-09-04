@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
-# 拿验证集逐类 AP（workers=0 避免 stdin 多进程崩溃）
+"""验证集逐类 AP 评估 (workers=0 规避 stdin 多进程崩溃)。"""
 from ultralytics import YOLO
 
-m = YOLO("weights/best.pt")
-metrics = m.val(data="dataset/data.yaml", verbose=False, workers=0, device=0)
-mp = metrics.box.maps  # per-class mAP50-95
-names = m.names
-print(f"整体 mAP50    = {metrics.box.map50:.3f}")
-print(f"整体 mAP50-95 = {metrics.box.map:.3f}")
-for i, n in names.items():
-    print(f"  class {i} ({n:6s}) mAP50-95 = {mp[i]:.3f}")
+net = YOLO("weights/best.pt")
+m = net.val(data="dataset/data.yaml", verbose=False, workers=0, device=0)
+per = m.box.maps
+print(f"mAP50    = {m.box.map50:.3f}")
+print(f"mAP50-95 = {m.box.map:.3f}")
+for cid, name in m.names.items():
+    print(f"  class {cid} ({name}) mAP50-95 = {per[cid]:.3f}")
