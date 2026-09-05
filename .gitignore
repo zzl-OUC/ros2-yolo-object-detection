@@ -32,3 +32,7 @@ dataset_backup_*/
 dataset_backup_20260904/
 .workbuddy/
 提交材料.zip
+
+# ---- 实例分割临时产物 (labels/scripts 入库, images 复用 dataset) ----
+seg/images/
+seg_verify/
