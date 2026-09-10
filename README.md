@@ -1,5 +1,12 @@
 # ros2-yolo-object-detection
 
+![ROS2](https://img.shields.io/badge/ROS2-Foxy-22314E?logo=ros&logoColor=white)
+![YOLO](https://img.shields.io/badge/YOLOv11s-Ultralytics-00BFFF)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Jetson](https://img.shields.io/badge/Jetson%20Orin%20NX-JetPack%205-76B900?logo=nvidia&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![验收](https://img.shields.io/badge/验收-识别率%2090%25%20%7C%20Jetson%2033.6%20FPS-brightgreen)
+
 > 课程实验一「目标检测与识别」：在自建桌面数据集（**鼠标 / 手机** 两类）上训练 YOLO11s 检测模型，并部署到 **Jetson Orin NX + ROS2 Foxy** 实现实时检测。
 > 另含单独扩展：**实例分割扩展（YOLO-Seg）**：用 GrabCut 由检测框自动生成像素级伪标注，训练出可同时输出类别框与掩膜的 YOLO11s-seg。
 
